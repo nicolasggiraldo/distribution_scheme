@@ -1,0 +1,10 @@
+#---------------------------------------
+#--------- PARAMETERS FILE -------------
+#---------------------------------------
+#+++++++++++++++++++++++++++++++++++++++
+#Number of cells per axis is N
+#Total number of cells is N^3
+NGRID = 128
+FILE_NAME = "/home/ngomez/box/Box400x512_z_0"
+GADGET_VERSION = 1
+SCHEME = "D20"
