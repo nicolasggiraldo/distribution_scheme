@@ -4,7 +4,7 @@
 #+++++++++++++++++++++++++++++++++++++++
 #Number of cells per axis is N
 #Total number of cells is N^3
-NGRID = 128
-FILE_NAME = "/home/ngomez/box/Box400x512_z_0"
+NGRID = 512
+FILE_NAME = "/home/nico/simBoxes/Box400x512_z_0_FullSnap.gad1"
 GADGET_VERSION = 1
 SCHEME = "D20"

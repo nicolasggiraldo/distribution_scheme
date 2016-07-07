@@ -65,21 +65,20 @@ struct particle *part=NULL;
 
 /* Structure gadget_head */
 struct gadget_head{
-  int    Npart[6];
-  double mass[6];
-  double time;
-  double redshift;
-  int    flag_sfr;
-  int    flag_feedback;
-  int    npartTotal[6];
-  int    flag_cooling;
-  int    num_files;
-  double BoxSize;
-  double Omega0;
-  double OmegaLambda;
-  double HubbleParam; 
-  char   fill[256- 6*4- 6*8- 2*8- 2*4- 6*4- 2*4 - 4*8];  /* fills to
-							    256 Bytes */
+  unsigned int Npart[6];
+  double       mass[6];
+  double       time;
+  double       redshift;
+  int          flag_sfr;
+  int          flag_feedback;
+  int          npartTotal[6];
+  int          flag_cooling;
+  int          num_files;
+  double       BoxSize;
+  double       Omega0;
+  double       OmegaLambda;
+  double       HubbleParam; 
+  char         fill[256-6*4-6*8-2*8-2*4-6*4-2*4-4*8]; // Fills to 256 Bytes
 }Header;
 
 
