@@ -143,8 +143,9 @@ int readGADGET1BinaryFile(){
   FILE *fdata = NULL;
   int i, j;
   int N_min, N_max, dummy;
-  float Maux, faux[3];
-  unsigned int uintaux;
+  //float Maux;
+  float faux[3];
+  //unsigned int uintaux;
   long int N_tot = 0L;
   size_t err;
   double totalMass;
@@ -208,28 +209,30 @@ int readGADGET1BinaryFile(){
   
   err = fread(&dummy, sizeof(dummy), 1, fdata);
   if(dummy != (3*N_tot*sizeof(float))){
-    printf(" Can not read properly ids %d %lu\n",
-	   dummy, 3*N_tot*sizeof(float));
+    printf(" Can not read properly positions %d %lu\n",dummy,3*N_tot*sizeof(float));
     return -3;
   }//if
+
+  // Closing file
+  fclose(fdata);
 
   
   /**********************/
   /* Getting velocities */
   /**********************/
   // VELOCITIES ARE NOT NECESSARY FOR OUR WORK
-  err = fread(&dummy,sizeof(dummy),1,fdata);
-  for(i=0; i<N_tot; i++){
-    err = fread(&faux[0],sizeof(float),3,fdata);
-    // SKIPPING!
-  }//for i
+  //err = fread(&dummy,sizeof(dummy),1,fdata);
+  //for(i=0; i<N_tot; i++){
+  //err = fread(&faux[0],sizeof(float),3,fdata);
+  // SKIPPING!
+  //}//for i
   
-  err = fread(&dummy, sizeof(dummy), 1, fdata);
-  if(dummy != (3*N_tot*sizeof(float))){
-    printf(" Can not read properly ids %d %lu\n",
-	   dummy, 3*N_tot*sizeof(float));
-    return -3;
-  }//if
+  //err = fread(&dummy, sizeof(dummy), 1, fdata);
+  //if(dummy != (3*N_tot*sizeof(float))){
+  //printf(" Can not read properly velocities %d %lu\n",
+  //dummy, 3*N_tot*sizeof(float));
+  //return -3;
+  //}//if
 
   
   /****************/
@@ -237,34 +240,47 @@ int readGADGET1BinaryFile(){
   /****************/
   // AS IDENTIFICATION METHOD,
   // WE ARE GOING TO USE THE INDEX OF THE PARTICLE ARRAY
-  err = fread(&dummy, sizeof(dummy), 1, fdata);
-  for(i=0; i<N_tot; i++){
-    err = fread(&uintaux, sizeof(unsigned int), 1, fdata);
-    // SKIPPING;
-  }//for i
+  //err = fread(&dummy, sizeof(dummy), 1, fdata);
+  //for(i=0; i<N_tot; i++){
+  //err = fread(&uintaux, sizeof(unsigned int), 1, fdata);
+  // SKIPPING;
+  //}//for i
 
-  err = fread(&dummy, sizeof(dummy), 1, fdata);
-  if(dummy != (N_tot*sizeof(unsigned int))){
-    printf(" Can not read properly ids %d %lu\n",
-	   dummy, N_tot*sizeof(unsigned int));
-    return -3;
-  }//if
+  //err = fread(&dummy, sizeof(dummy), 1, fdata);
+  //if(dummy != (N_tot*sizeof(unsigned int))){
+  //printf(" Can not read properly ids %d %lu\n",
+  //dummy, N_tot*sizeof(unsigned int));
+  //return -3;
+  //}//if
 
   
   /******************/
   /* Getting masses */
   /******************/
-  err = fread(&dummy, sizeof(dummy),1,fdata);
+  //err = fread(&dummy, sizeof(dummy),1,fdata);
+  //N_min = N_max=0;
+  //for(j=0; j<=5; j++){
+  //N_max=N_max+Header.npartTotal[j];
+  //if((Header.mass[j]==0) && (Header.npartTotal[j]!=0)){
+  //for(i=N_min;i<N_max;i++){
+  //err = fread(&Maux,sizeof(float),1,fdata);
+  //part[i].mass = Maux;
+  //}//for i
+  //}//if
+  //if((Header.mass[j]!=0) && (Header.npartTotal[j]!=0)){
+  //for(i=N_min;i<N_max;i++){
+  //part[i].mass = Header.mass[j];
+  //}//for i
+  //}//if
+  //N_min=N_max;
+  //}//for j
+
+  //err = fread(&dummy,sizeof(dummy),1,fdata);
+
+  //////////////////////////////////////////
   N_min = N_max=0;
   for(j=0; j<=5; j++){
     N_max=N_max+Header.npartTotal[j];
-    
-    if((Header.mass[j]==0) && (Header.npartTotal[j]!=0)){
-      for(i=N_min;i<N_max;i++){
-	err = fread(&Maux,sizeof(float),1,fdata);
-	part[i].mass = Maux;
-      }//for i
-    }//if
     
     if((Header.mass[j]!=0) && (Header.npartTotal[j]!=0)){
       for(i=N_min;i<N_max;i++){
@@ -281,18 +297,15 @@ int readGADGET1BinaryFile(){
   for(j=0; j<=5; j++){
     totalMass += Header.Npart[j] * Header.mass[j];
   }
-  
-  err = fread(&dummy,sizeof(dummy),1,fdata);
 
   // Closing file
-  fclose(fdata);
+  //fclose(fdata);
 
 
   /***************************************************************/
   /* Storing parameters of the simulation in the gloval structure */
   /***************************************************************/
 
-  
   GV.L = Header.BoxSize;                 // Lenght of the simulation in Mpc
   GV.NP_TOT = N_tot;                     /* Total number of particles in 
 					    the simulation */
@@ -540,19 +553,19 @@ long int readGADGET2BinaryFile(){
 
 
 
-/*                                                                                                                       
- * Function:  compare                                                                                                    
- * --------------------                                                                                                  
- * Comparation function for the use of the qsort routine.                                                                
- * This function gives the necessary rules for the sorting.                                                              
- *                                                                                                                       
+/*
+ * Function:  compare  
+ * --------------------
+ * Comparation function for the use of the qsort routine.
+ * This function gives the necessary rules for the sorting.
+ * 
  *  eleme1 and elem2: Elements of the struct particle type 
- *                    to sort according to the z-axis value.                                                         
- *                                                                                                                       
+ *                    to sort according to the z-axis value.
+ *   
  *  returns: 1,  if the z value of the first particle is 
- *               greater than the second particle.                                                                    
- *           -1, if the z value of the second particle is               
- *               greater than the first particle.                                                                     
+ *               greater than the second particle.
+ *           -1, if the z value of the second particle is 
+ *               greater than the first particle.
  *           0,  if both particles have the same z value.                                                
  */
 int compare(struct particle *elem1, struct particle *elem2){
@@ -568,7 +581,7 @@ int compare(struct particle *elem1, struct particle *elem2){
   
 }
 
-/* This type definition is necessary                                                                                     
+/* This type definition is necessary 
    for the use of the qsort routine */
 typedef int (*compfn)(const void*, const void*);
 
